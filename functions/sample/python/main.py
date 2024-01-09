@@ -5,7 +5,15 @@ Returns:
 """
 from cloudant.client import Cloudant
 from cloudant.error import CloudantException
+from dotenv import load_dotenv
+import os
+
 import requests
+
+load_dotenv()
+
+couch_username = os.getenv('COUCH_USERNAME')
+iam_api_key = os.getenv('IAM_API_KEY')
 
 
 def main(param_dict):
@@ -20,8 +28,8 @@ def main(param_dict):
 
     try:
         client = Cloudant.iam(
-            account_name=param_dict["COUCH_USERNAME"],
-            api_key=param_dict["IAM_API_KEY"],
+            account_name=param_dict[couch_username],
+            api_key=param_dict[iam_api_key],
             connect=True,
         )
         print(f"Databases: {client.all_dbs()}")
