@@ -1,0 +1,18 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "Cloud Functions for handling a dealerships general & reivew data",
+  "main": "get-dealership.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cloudant/cloudant": "^4.5.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^9.4.0"
+  }
+}
