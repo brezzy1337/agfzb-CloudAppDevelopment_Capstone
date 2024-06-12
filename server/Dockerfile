@@ -3,7 +3,7 @@ FROM python:3.8.2
 ENV PYTHONBUFFERED 1
 ENV PYTHONWRITEBYTECODE 1
 
-RUN apt-get update ` \
+RUN apt-get update \
     && apt-get install -y netcat
 
 ENV APP=/app 
