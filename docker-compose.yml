@@ -1,16 +1,16 @@
 version: '3.9'
 
 services:
-  django: 
+  django:
     build:
-      context: .
-      dockerfile: Dockerfile 
+      context: /server
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=djangobackend.settings  # Set your Django settings module
     volumes:
-    - .:/app
+      - .:/app
     depends_on:
      - mongo
     restart: always
@@ -18,7 +18,7 @@ services:
   nodeapp:
     image: nodeapp:lastest
     build:
-      context: .
+      context: /functions
       dockerfile: Dockerfile.node
     ports:
       - "3000:3000"
@@ -26,6 +26,20 @@ services:
       - MONGO_URL=mongodb://mongo:27017/mydatabase
     depends_on:
       - mongo
+    restart: always
+
+  flaskapp:
+    build:
+      context: /functions
+      dockerfile: Dockerfile.flask
+    ports:
+      - "5000:5000"
+    environment:
+      - CLOUDANT_USERNAME=${CLOUDANT_USERNAME}
+      - IAM_API_KEY=${IAM_API_KEY}
+      - CLOUDANT_URL=${CLOUDANT_URL}
+    depends_on:
+     - mongo
     restart: always
 
   mongo:
