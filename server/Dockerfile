@@ -10,9 +10,9 @@ ENV APP=/app
 
 WORKDIR $APP 
 
-COPY requirement.txt $APP 
+COPY requirements.txt $APP 
 RUN pip install --upgrade pip
-RUN pip install -r requirement.txt
+RUN pip install -r requirements.txt
 
 COPY . $APP
 
