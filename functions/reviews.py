@@ -1,4 +1,4 @@
-from cloudant.client import cloudant
+from cloudant.client import Cloudant
 from cloudant.query import query
 from flask import Flask, jsonify, request
 import atexit
@@ -9,6 +9,7 @@ load_dotenv()
 cloudant_username = CLOUDANT_USERNAME
 cloudant_api_KEY = IAM_API_KEY
 cloudant_url = CLOUDANT_URL
+client = Cloudant.iam(cloudant_username, cloudant_api_KEY, connect=TRUE, url=cloudant_url)
 
 session = client.session()
 print('Databases:', client.all.dbs())
@@ -41,6 +42,10 @@ def get_reviews():
 
     # Create a list to store the documents
     data_list = []
+
+    # Iterate through the results and add documents to the list
+    for doc in result:
+        data_list.append(doc)
 
     # Return the data as JSON
     return jsonify(data_list)
