@@ -4,11 +4,45 @@ import json
 from requests.auth import HTTPBasicAuth
 
 
-# Create a `get_request` to make HTTP GET requests
-# e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-#                                     auth=HTTPBasicAuth('apikey', api_key))
+# Functions for making HTTP GET requests
+def get_request(endpoint, api_key=False, **kwargs):
+    print(f"GET from {url}")
+    if api_key:
+        # Basic authentication GET
+        try:
+            response = requests.get(url, headers={'Content-Type': 'application/json'}, 
+                params=kwargs, auth=HTTPBasicAuth('apikey', api_key))
 
+        except:
+            print("An error occurred while making GET request.")
+        
+    else: 
+        # No authentication GET
+        try:
+            response = request.get(url, headers={'Content-Type': 'application/json'},
+                params=kwargs)
+         except:
+            print("An error occurred while making GET request.")
 
+        # Retriveiving the response status code and content
+        status_code = response.status_code
+        print(f"With status {status_code}")
+        json_data = json.loads(response.text)
+
+        return json_data
+
+    # Function for making HTTP POST requests
+    def post_request(url, json_payload, **kwargs):
+        print(f"POST to {url}")
+        try:
+            response = requests.post(url, params=kwargs, json=json_payload)
+        except:
+            print("An error occurred while making POST request. ")
+        status_code = response.status_code
+        print(f"With status {status_code}")
+
+        return response
+        # Call get method of request 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 
