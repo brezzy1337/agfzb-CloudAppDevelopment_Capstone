@@ -3,7 +3,7 @@ version: '3.9'
 services:
   django:
     build:
-      context: /server
+      context: ./server
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -12,40 +12,40 @@ services:
     volumes:
       - .:/app
     depends_on:
-     - mongo
+      - db
     restart: always
 
   nodeapp:
     image: nodeapp:lastest
     build:
-      context: /functions
+      context: ./functions
       dockerfile: Dockerfile.node
     ports:
       - "3000:3000"
     environment:
       - MONGO_URL=mongodb://mongo:27017/mydatabase
     depends_on:
-      - mongo
+      - db
     restart: always
 
   flaskapp:
     build:
-      context: /functions
+      context: ./functions
       dockerfile: Dockerfile.flask
     ports:
       - "5000:5000"
-    environment:
-      - CLOUDANT_USERNAME=${CLOUDANT_USERNAME}
-      - IAM_API_KEY=${IAM_API_KEY}
-      - CLOUDANT_URL=${CLOUDANT_URL}
+    #environment:
+    #  - CLOUDANT_USERNAME=${CLOUDANT_USERNAME}
+    #  - IAM_API_KEY=${IAM_API_KEY}
+    #  - CLOUDANT_URL=${CLOUDANT_URL}
     depends_on:
-     - mongo
+     - db
     restart: always
 
-  mongo:
-    image: mongo:4.4
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     restart: always
