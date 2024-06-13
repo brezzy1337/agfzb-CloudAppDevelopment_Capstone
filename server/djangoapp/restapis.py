@@ -5,7 +5,7 @@ from requests.auth import HTTPBasicAuth
 
 
 # Functions for making HTTP GET requests
-def get_request(endpoint, api_key=False, **kwargs):
+def get_request(url, api_key=False, **kwargs):
     print(f"GET from {url}")
     if api_key:
         # Basic authentication GET
@@ -43,13 +43,25 @@ def get_request(endpoint, api_key=False, **kwargs):
 
         return response
         # Call get method of request 
-# Create a `post_request` to make HTTP POST requests
-# e.g., response = requests.post(url, params=kwargs, json=payload)
 
+# Gets all dealers from the Cloudant DB with the cloud function get-dealerships
+def get_dealers_from_cf(url):
+    result = []
+    json_result = get_request(url)
+    # Retrieve the dealer data from the resposne
+    dealers = json_result["body"]["rows"]
+    # For each dealer in the response
+    for dealer in dealers:
+        # Get its data in `doc` object
+        dealer_doc = dealer["doc"]
+        # Create a CarDealer object with values in `doc` object
+        dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city", full_name=dealer_doc["full_name"], 
+                               id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                               short_name=dealer_doc["short_name"], st=dealer_doc["st"], state=dealer_doc["state"], zip=dealer_doc["zip"])
+        results.append(dealer_obj)
+        
+    return results        
 
-# Create a get_dealers_from_cf method to get dealers from a cloud function
-# def get_dealers_from_cf(url, **kwargs):
-# - Call get_request() with specified arguments
 # - Parse JSON results into a CarDealer object list
 
 
