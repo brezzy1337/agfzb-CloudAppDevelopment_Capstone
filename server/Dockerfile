@@ -10,7 +10,7 @@ ENV APP=/app
 
 WORKDIR $APP 
 
-COPY requirements.txt $APP 
+COPY requirements.txt $APP/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
@@ -18,6 +18,7 @@ COPY . $APP
 
 EXPOSE 8000
 
+COPY entrypoint.sh $APP/
 RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 
