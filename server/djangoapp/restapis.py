@@ -1,7 +1,7 @@
 import requests
 import json
-# import related models here
 from requests.auth import HTTPBasicAuth
+from .models import CarDealer, DealerReview
 
 
 # Functions for making HTTP GET requests
@@ -64,12 +64,51 @@ def get_dealers_from_cf(url):
 
 # - Parse JSON results into a CarDealer object list
 
+def post_review(data_dict)
+
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
 
+def get_dealer_reviews_from_cf(url, dealer_id)
+    result = []
+    json_result = get_request(url)
+    if json_result:
+        reviews = json_result
+            # print("Revs________________")
+            # print(reviews)
+            # print("________________")
+
+        for single_review in reviews:
+            # ... (print statements)
+            # print("SRevs________________")
+            # print(single_review)
+            # print("________________")
+        
+            # Creating a review object
+            # Use .get() Method to .get(key, default_value) to access dirtionary values gracefully, avoiding KeyKerrors without need for a try... expect block.
+            dealer_review = DealerReview( # Create Object initially
+                id=single_review['id'],
+                name=single_review['name'],
+                dealership=single_review['dealership'],
+                review=single_review['review'],
+                purchase=single_review['purchase'],
+                purchase_date=single_review['purchase_date'],
+                car_make=single_review['car_make'],
+                car_model=single_review['car_model'],
+                car_year=single_review['car_year'],
+                sentiment="",
+            )
+
+            # Analysing the sentiment of the review object's review text and saving it to the object attribute "sentiment"
+            dealer_review.sentiment = analyze_review_sentiments(dealer_review.reveiw)
+
+            # Saving the review object to the list of results
+            result.append(dealer_review)
+            print("DEALER REVIEW", dealer_review)
+return result
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 # def analyze_review_sentiments(text):

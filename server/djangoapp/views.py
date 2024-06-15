@@ -11,6 +11,8 @@ import json
 from .models import CarMake, CarModel
 from .populate import initiate
 
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf,
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -96,7 +98,7 @@ def get_cars(request):
 def get_dealerships(request):
     context = {}
     if request.method == "GET":
-        url = "http://localhost:3000/dealerships/get"
+        url = "http://localhost:3000/dealerships/get" # Can replace with Cloud Function URL
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         
@@ -116,10 +118,6 @@ def get_dealer_details(request, dealer_id):
         context = {"reviews" :reviews, "dealer_id": dealer_id}
         return render(request, 'djangoapp/dealer_details.html', context)
 
-
-
-
-
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
     # User must be logged in to post a review
@@ -128,7 +126,7 @@ def add_review(request, dealer_id):
         if request.method == "GET":
             url = "http://localhost:3000/dealership/get"
             # Get dealer details from the API
-            dealer = get_dealer_by_if_from_cd(url, dealer_id=dealer_id)
+            dealer = get_dealer_by_if_from_cf(url, dealer_id=dealer_id)
             # Extract dealer object at index 1: dealer[1]
             context = {
                 "cars": CarModel.objects.all(),
