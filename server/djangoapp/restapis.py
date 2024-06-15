@@ -66,9 +66,6 @@ def get_dealers_from_cf(url):
 
 def post_review(data_dict)
 
-
-# Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-# def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
 
@@ -115,5 +112,18 @@ return result
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 
+def analyze_review_sentiments(dealer_review)
+    body =  {"text": dealer_review, "features": {"sentiment": {"document": True}}}
+    print(dealer_review)
+    response = requests.post(
+        service_creditentials["url"] + "/v1/analyze?version=2019-07-12", # watson_url
+        header={"Content-Type": "application/json"}
+        json=body
+        auth=HTTPBasicAuth("apikey", service_creditentials["apikey"]), # watson_api_key
+    )
 
-
+    # Check if request was successful
+    if response.status_code = 200:
+        sentiment = response.json()["sentiment"]["document"]["label"]
+        return sentiment
+return "Request Unsucessful"
