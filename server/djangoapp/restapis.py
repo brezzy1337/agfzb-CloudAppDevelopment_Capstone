@@ -21,7 +21,7 @@ def get_request(url, api_key=False, **kwargs):
         try:
             response = request.get(url, headers={'Content-Type': 'application/json'},
                 params=kwargs)
-         except:
+        except:
             print("An error occurred while making GET request.")
 
         # Retriveiving the response status code and content
@@ -55,7 +55,7 @@ def get_dealers_from_cf(url):
         # Get its data in `doc` object
         dealer_doc = dealer["doc"]
         # Create a CarDealer object with values in `doc` object
-        dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city", full_name=dealer_doc["full_name"], 
+        dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"], 
                                id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
                                short_name=dealer_doc["short_name"], st=dealer_doc["st"], state=dealer_doc["state"], zip=dealer_doc["zip"])
         results.append(dealer_obj)
@@ -63,13 +63,7 @@ def get_dealers_from_cf(url):
     return results        
 
 # - Parse JSON results into a CarDealer object list
-
-def post_review(data_dict)
-
-# - Call get_request() with specified arguments
-# - Parse JSON results into a DealerView object list
-
-def get_dealer_reviews_from_cf(url, dealer_id)
+def get_dealer_reviews_from_cf(url, dealer_id):
     result = []
     json_result = get_request(url)
     if json_result:
@@ -105,25 +99,25 @@ def get_dealer_reviews_from_cf(url, dealer_id)
             # Saving the review object to the list of results
             result.append(dealer_review)
             print("DEALER REVIEW", dealer_review)
-return result
+    return result
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 # def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 
-def analyze_review_sentiments(dealer_review)
+def analyze_review_sentiments(dealer_review):
     body =  {"text": dealer_review, "features": {"sentiment": {"document": True}}}
     print(dealer_review)
     response = requests.post(
         service_creditentials["url"] + "/v1/analyze?version=2019-07-12", # watson_url
-        header={"Content-Type": "application/json"}
-        json=body
+        header={"Content-Type": "application/json"},
+        json=body,
         auth=HTTPBasicAuth("apikey", service_creditentials["apikey"]), # watson_api_key
     )
 
     # Check if request was successful
-    if response.status_code = 200:
+    if response.status_code == 200:
         sentiment = response.json()["sentiment"]["document"]["label"]
         return sentiment
-return "Request Unsucessful"
+    return "Request Unsucessful"

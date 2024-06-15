@@ -11,7 +11,7 @@ import json
 from .models import CarMake, CarModel
 from .populate import initiate
 
-from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf,
+from .restapis import get_dealers_from_cf
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -133,46 +133,46 @@ def add_review(request, dealer_id):
                 "dealer": dealer[1],
             }
 
-return render(request, 'django/add_review.html', context)
+    return render(request, 'django/add_review.html', context)
 
-# Post requests posts the content in the reveiw submission form to the Cloudant DB using the post_review Cloud Function
-if request.method == "POST":
-    # Get data form the reqest
-    review_post_json_data = request.Post # Loads data from the form
-    print("AT POST REQUEST: ")
-    print(request.POST)
-    # Store data to review dictionary one by one
-    review = {}
-    review["id"] = review_post_json_data.get("id")
-    review["name"] = review_post_json_data.get("name")
-    review["dealership"] = dealer_id
-    review["review"] = review_post_json_data.get("review")
-    review["purchase"] = review_post_json_data.get("purchase")
+    # Post requests posts the content in the reveiw submission form to the Cloudant DB using the post_review Cloud Function
+    if request.method == "POST":
+        # Get data form the reqest
+        review_post_json_data = request.Post # Loads data from the form
+        print("AT POST REQUEST: ")
+        print(request.POST)
+        # Store data to review dictionary one by one
+        review = {}
+        review["id"] = review_post_json_data.get("id")
+        review["name"] = review_post_json_data.get("name")
+        review["dealership"] = dealer_id
+        review["review"] = review_post_json_data.get("review")
+        review["purchase"] = review_post_json_data.get("purchase")
 
-    if review["purchase"]:
-        purchase_date_str = review_post_json_data.get("purchase_date")
-        if purchase_date_str:
-            purchase_date = datetime.strptime(purchase_date_str, "%m/%d/%Y")
-            review["purchase_date"] = purchase_date.strftime("%m/%d/%Y")
-        else:  
+        if review["purchase"]:
+            purchase_date_str = review_post_json_data.get("purchase_date")
+            if purchase_date_str:
+                purchase_date = datetime.strptime(purchase_date_str, "%m/%d/%Y")
+                review["purchase_date"] = purchase_date.strftime("%m/%d/%Y")
+            else:  
+                review["purchase_date"] = None
+        else:
             review["purchase_date"] = None
-    else:
-        review["purchase_date"] = None
 
-    print("AT review:   ")
-    print(review)
-    car = get_object_or_404(CarModel, pk=review["id"])
-    review["car_make"] = car.car_make.name
-    review["car_model"] = car.name
-    review["car_year"] = car.car_year.strftime("%Y")
+        print("AT review:   ")
+        print(review)
+        car = get_object_or_404(CarModel, pk=review["id"])
+        review["car_make"] = car.car_make.name
+        review["car_model"] = car.name
+        review["car_year"] = car.car_year.strftime("%Y")
 
-    # make requests to this url: flask server: review.py
-    url ="http://127.0.0.1:5000/api/post_review" # APU Cloud Function route
-    json_payload = {"review": review} # Create a JSON payload that contains the review data
+        # make requests to this url: flask server: review.py
+        url ="http://127.0.0.1:5000/api/post_review" # APU Cloud Function route
+        json_payload = {"review": review} # Create a JSON payload that contains the review data
 
-    # Performing a POST request with the review
-    print("JSON PAYLOAD IS HERE:", json_payload)
-    #After posting the review the user is redirected back to the dealer details page
-    return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
-print("User must be authenticated before posting a review. Please log in.")
-return redirect("/djangoapp/login")
+        # Performing a POST request with the review
+        print("JSON PAYLOAD IS HERE:", json_payload)
+        #After posting the review the user is redirected back to the dealer details page
+        return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
+    print("User must be authenticated before posting a review. Please log in.")
+    return redirect("/djangoapp/login")
