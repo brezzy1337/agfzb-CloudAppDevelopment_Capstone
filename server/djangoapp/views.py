@@ -11,7 +11,7 @@ import json
 from .models import CarMake, CarModel
 from .populate import initiate
 
-from .restapis import get_dealers_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -98,7 +98,8 @@ def get_cars(request):
 def get_dealerships(request):
     context = {}
     if request.method == "GET":
-        url = "http://localhost:3000/dealerships/get" # Can replace with Cloud Function URL
+        url = "https://devinphat97-8000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
+        #url = "http://localhost:3000/dealerships/get" # Can replace with Cloud Function URL
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         
